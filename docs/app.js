@@ -62,6 +62,12 @@ function statusLabel(s) {
 
 /* ----------------------------------------------------------------- utils  */
 
+// Never let a stored field become a javascript: or data: href.
+function safeUrl(u) {
+  var s = String(u || "").trim();
+  return /^https?:\/\//i.test(s) ? s : "";
+}
+
 function el(tag, attrs, kids) {
   var n = document.createElement(tag);
   if (attrs) for (var k in attrs) {
@@ -901,7 +907,7 @@ function doiOrUrl(p) {
     var d = String(p.doi).replace(/^https?:\/\/(dx\.)?doi\.org\//, "");
     return '<a href="https://doi.org/' + esc(d) + '" target="_blank" rel="noopener noreferrer">https://doi.org/' + esc(d) + "</a>";
   }
-  if (p.url) return '<a href="' + esc(p.url) + '" target="_blank" rel="noopener noreferrer">' + esc(p.url) + "</a>";
+  if (safeUrl(p.url)) return '<a href="' + esc(safeUrl(p.url)) + '" target="_blank" rel="noopener noreferrer">' + esc(p.url) + "</a>";
   return "";
 }
 
@@ -1183,10 +1189,22 @@ function renderFacets() {
   renderFacet($("facetType"), TYPES.filter(function (t) { return tc[t[0]] || State.types[t[0]]; })
     .map(function (t) { return [t[0], tc[t[0]] || 0]; }), State.types, typeLabel);
 
+  // The tag list grows without bound, and on a phone it would push the papers
+  // off the screen, so only the commonest are shown until asked for.
   var gc = countBy(all, function (p) { return p.tags; });
   var tags = Object.keys(gc).sort(function (a, b) { return gc[b] - gc[a] || a.localeCompare(b); })
     .map(function (k) { return [k, gc[k]]; });
-  renderFacet($("facetTags"), tags, State.tags);
+  var TAG_CAP = 12;
+  var shownTags = State.allTags ? tags
+    : tags.filter(function (t, i) { return i < TAG_CAP || State.tags[t[0]]; });
+  renderFacet($("facetTags"), shownTags, State.tags);
+  if (tags.length > TAG_CAP) {
+    $("facetTags").appendChild(el("button", {
+      class: "chip", type: "button",
+      text: State.allTags ? "Show fewer" : "Show all " + tags.length,
+      onclick: function () { State.allTags = !State.allTags; render(); }
+    }));
+  }
 }
 
 /* ------------------------------------------------------------------ list  */
@@ -1292,7 +1310,7 @@ function openDetail(id) {
 
   var links = el("div", { class: "detail-links" });
   if (p.doi) links.appendChild(el("a", { href: "https://doi.org/" + p.doi, target: "_blank", rel: "noopener noreferrer", text: "DOI ↗" }));
-  if (p.url) links.appendChild(el("a", { href: p.url, target: "_blank", rel: "noopener noreferrer", text: "Link ↗" }));
+  if (safeUrl(p.url)) links.appendChild(el("a", { href: safeUrl(p.url), target: "_blank", rel: "noopener noreferrer", text: "Link ↗" }));
   links.appendChild(el("a", {
     href: "https://github.com/" + CFG.owner + "/" + CFG.repo + "/blob/" + CFG.branch + "/" + CFG.dir + "/" + (p._file || p.id + ".md"),
     target: "_blank", rel: "noopener noreferrer", text: "File on GitHub ↗"
@@ -1405,7 +1423,8 @@ function openEditor(existing) {
   grid.appendChild(fieldRow("Publisher", "publisher", p.publisher));
   grid.appendChild(fieldRow("Institution / school", "institution", p.institution));
   grid.appendChild(fieldRow("DOI", "doi", p.doi, { placeholder: "10.1000/xyz123" }));
-  grid.appendChild(fieldRow("URL", "url", p.url, { wide: true }));
+  grid.appendChild(fieldRow("URL", "url", p.url));
+  grid.appendChild(fieldRow("Accessed", "accessed", p.accessed, { placeholder: "2026-09-08" }));
   grid.appendChild(fieldRow("Editors", "editors", (p.editors || []).join("\n"),
     { textarea: true, rows: 2, wide: true, hint: "one per line; for chapters and proceedings" }));
   grid.appendChild(fieldRow("Tags", "tags", (p.tags || []).join(", "),
@@ -1416,10 +1435,14 @@ function openEditor(existing) {
 
   form.appendChild(grid);
 
+  // form.title and form.id would resolve to the element's own DOM properties
+  // rather than to the inputs, so every field goes through namedItem.
+  function fld(name) { return form.elements.namedItem(name); }
+
   // Retitle the container field when the type changes, so the label always
   // says what actually belongs there.
-  form.type.addEventListener("change", function () {
-    containerRow.querySelector("label").firstChild.nodeValue = CONTAINER_LABEL[form.type.value] || "Container";
+  fld("type").addEventListener("change", function () {
+    containerRow.querySelector("label").firstChild.nodeValue = CONTAINER_LABEL[fld("type").value] || "Container";
   });
 
   var errBox = el("p", { class: "err" });
@@ -1460,29 +1483,32 @@ function openEditor(existing) {
 
   function collect() {
     errBox.textContent = "";
-    var f = form;
-    var lines = function (v) { return String(v || "").split("\n").map(function (s) { return s.trim(); }).filter(Boolean); };
+    var v = function (name) { return String(fld(name).value || "").trim(); };
+    var lines = function (name) {
+      return String(fld(name).value || "").split("\n")
+        .map(function (s) { return s.trim(); }).filter(Boolean);
+    };
     var built = {
-      id: slug(f.id.value.trim()),
-      type: f.type.value,
-      title: f.title.value.trim(),
-      authors: lines(f.authors.value),
-      editors: lines(f.editors.value),
-      year: f.year.value.trim(),
-      container: f.container.value.trim(),
-      volume: f.volume.value.trim(),
-      issue: f.issue.value.trim(),
-      pages: f.pages.value.trim(),
-      publisher: f.publisher.value.trim(),
-      institution: f.institution.value.trim(),
-      doi: f.doi.value.trim().replace(/^https?:\/\/(dx\.)?doi\.org\//, ""),
-      url: f.url.value.trim(),
-      accessed: p.accessed || "",
-      tags: f.tags.value.split(",").map(function (t) { return slug(t); }).filter(Boolean),
-      status: f.status.value,
+      id: slug(v("id")),
+      type: v("type"),
+      title: v("title"),
+      authors: lines("authors"),
+      editors: lines("editors"),
+      year: v("year"),
+      container: v("container"),
+      volume: v("volume"),
+      issue: v("issue"),
+      pages: v("pages"),
+      publisher: v("publisher"),
+      institution: v("institution"),
+      doi: v("doi").replace(/^https?:\/\/(dx\.)?doi\.org\//, ""),
+      url: v("url"),
+      accessed: v("accessed"),
+      tags: v("tags").split(",").map(function (t) { return slug(t); }).filter(Boolean),
+      status: v("status"),
       added: p.added || today(),
       added_by: p.added_by || Auth.login || "",
-      notes: f.notes.value
+      notes: fld("notes").value
     };
     if (!built.title) { errBox.textContent = "A title is required."; return null; }
     if (!built.id) built.id = makeId(built, {});
