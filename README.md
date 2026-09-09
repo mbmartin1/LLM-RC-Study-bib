@@ -35,25 +35,35 @@ generated, nothing is cached server-side, and nothing can go stale. Editing a
 ## Getting edit access
 
 Reading needs nothing. Writing needs a GitHub token from an account that is a
-collaborator here:
+collaborator here. **Every person makes their own token** — never pass one
+around. Edits are recorded as whoever's token made them, and access is granted
+and revoked per person from Settings → Collaborators.
 
 1. Ask Matias to add your GitHub account as a collaborator on this repository.
-2. Create a **fine-grained** personal access token at
-   <https://github.com/settings/personal-access-tokens/new>.
-3. Resource owner `mbmartin1`; repository access **Only select repositories →
-   LLM-RC-Study-bib**.
-4. Repository permissions: **Contents → Read and write**. Nothing else.
-5. Set an expiry, generate, and paste it into the site's top-right button.
+2. Create a **classic** token at
+   <https://github.com/settings/tokens/new?scopes=repo&description=LLM-RC-Study-bib>
+   (Settings → Developer settings → Personal access tokens → Tokens (classic)).
+3. Tick the top-level **`repo`** scope. Nothing else is needed.
+4. Set an expiry, generate it, and paste it into the site's top-right button.
 
 The token is held in your browser's local storage and is sent only to
 `api.github.com`. GitHub — not the page — decides whether a write is allowed, so
-a token from a non-collaborator cannot change anything. Scoped this way, the
-worst case if it leaks is an unwanted edit here, which is reversible from the
-repository history.
+a token from a non-collaborator cannot change anything here.
+
+> **Treat the token like a password.** A classic token cannot be narrowed to a
+> single repository: the `repo` scope reaches every repository your account can
+> access. Give it an expiry, do not reuse it for anything else, and revoke it at
+> <https://github.com/settings/tokens> when you are done with the project or if
+> you think it has leaked.
+
+Fine-grained tokens do not work here. GitHub only lets a fine-grained token name
+your own account or an organisation as its resource owner, so one cannot reach a
+repository owned by another personal account — even for a collaborator. If that
+becomes a problem, moving this repository into a GitHub organisation would let
+everyone use fine-grained tokens scoped to this repo alone.
 
 Without a token the site still works read-only, and Add/Edit hands you off to
 GitHub's own editor instead of saving directly.
-
 
 ## The file format
 

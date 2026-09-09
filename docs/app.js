@@ -538,8 +538,8 @@ var Store = {
         if (r.status === 409 || /does not match/i.test(msg)) {
           msg = "Someone else changed this paper while you were editing. Reload the page and redo your edit.";
         } else if (r.status === 403 || r.status === 404) {
-          msg = "GitHub refused the write. Your token needs Contents: Read and write on this repository, " +
-                "and your account needs collaborator access.";
+          msg = "GitHub refused the write. Your token needs the repo scope, and your account needs " +
+                "collaborator access to this repository.";
         }
         throw new Error(msg);
       });
@@ -1875,7 +1875,7 @@ function openAuth() {
 
   if (Auth.canWrite) {
     wrap.appendChild(el("p", { class: "sheet-sub",
-      text: "Signed in as " + (Auth.login || "your token") + " with write access. Your token is kept in this browser only — it is never sent anywhere except GitHub." }));
+      text: "Signed in as " + (Auth.login || "your token") + " with write access. Your token is kept in this browser only — it is never sent anywhere except GitHub. Sign out here if you are on a shared machine." }));
     wrap.appendChild(el("div", { class: "form-actions" }, [
       el("button", { class: "btn", type: "button", text: "Sign out of this browser", onclick: function () {
         Auth.remember("");
@@ -1894,20 +1894,31 @@ function openAuth() {
   wrap.appendChild(el("p", { class: "sheet-sub",
     text: "Anyone can read this bibliography. Editing needs a GitHub token from an account with collaborator access to the repository." }));
 
+  // Fine-grained tokens cannot reach a repository owned by another personal
+  // account, even for a collaborator, so this repo uses classic tokens.
   var steps = el("div", { class: "md" });
   steps.innerHTML =
     "<ol>" +
-    "<li>Ask Matias to add your GitHub account as a collaborator on <code>" + esc(CFG.owner + "/" + CFG.repo) + "</code>.</li>" +
-    "<li>Open <a href=\"https://github.com/settings/personal-access-tokens/new\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/settings/personal-access-tokens/new</a> and create a <strong>fine-grained</strong> token.</li>" +
-    "<li>Resource owner <code>" + esc(CFG.owner) + "</code>, repository access <strong>Only select repositories → " + esc(CFG.repo) + "</strong>.</li>" +
-    "<li>Under Repository permissions set <strong>Contents: Read and write</strong>. Nothing else is needed.</li>" +
-    "<li>Give it an expiry date, generate it, and paste it below.</li>" +
+    "<li>Ask Matias to add <em>your own</em> GitHub account as a collaborator on <code>" +
+      esc(CFG.owner + "/" + CFG.repo) + "</code>.</li>" +
+    "<li>Open <a href=\"https://github.com/settings/tokens/new?scopes=repo&description=" + esc(CFG.repo) +
+      "\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/settings/tokens/new</a> " +
+      "\u2014 a <strong>classic</strong> token (Settings \u2192 Developer settings \u2192 " +
+      "Personal access tokens \u2192 Tokens (classic)).</li>" +
+    "<li>Tick the top-level <strong>repo</strong> scope. Nothing else is needed.</li>" +
+    "<li>Set an expiry, generate it, and paste it below.</li>" +
     "</ol>" +
+    "<p><strong>Make your own token \u2014 never use someone else's.</strong> Every edit is recorded " +
+    "as whoever's token made it, and access is granted and revoked per person.</p>" +
     "<p>The token stays in this browser's local storage and is sent only to <code>api.github.com</code>. " +
-    "Because it is scoped to one repository with one permission, the worst case if it leaks is an unwanted edit to this bibliography, which is reversible from the repository history.</p>";
+    "A classic token cannot be narrowed to one repository \u2014 the <code>repo</code> scope reaches every " +
+    "repository your account can access \u2014 so treat it like a password: give it an expiry, do not reuse " +
+    "it elsewhere, and revoke it at <a href=\"https://github.com/settings/tokens\" target=\"_blank\" " +
+    "rel=\"noopener noreferrer\">github.com/settings/tokens</a> when you are done with the project or if " +
+    "you think it has leaked.</p>";
   wrap.appendChild(steps);
 
-  var tokenField = fieldRow("Token", "token", "", { wide: true, placeholder: "github_pat_…" });
+  var tokenField = fieldRow("Token", "token", "", { wide: true, placeholder: "ghp_…" });
   tokenField.querySelector("input").type = "password";
   wrap.appendChild(el("div", { class: "form-grid" }, [tokenField]));
 
@@ -1926,7 +1937,7 @@ function openAuth() {
       if (!ok) {
         Auth.remember("");
         err.textContent = "That token reached GitHub but does not have write access to this repository. " +
-                          "Check that you are a collaborator and that the token grants Contents: Read and write.";
+                          "Check that you have been added as a collaborator, and that the token has the repo scope.";
         paintAuth();
         return;
       }
