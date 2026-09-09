@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Reading-Cost Study — Bibliography</title>
+<meta name="description" content="Shared annotated bibliography for the LLM communicative-efficiency study.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128218;</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>Annotated Bibliography</h1>
+    <p class="brand-sub">LLM communicative-efficiency study &middot; <a id="repoLink" href="#" target="_blank" rel="noopener">source</a></p>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn" id="btnImport" title="Import BibTeX, RIS or CSL-JSON">Import</button>
+    <button class="btn" id="btnAdd" title="Add a paper by hand">Add paper</button>
+    <button class="btn btn-primary" id="btnExport" title="Build an APA reference page">Export</button>
+    <button class="btn btn-ghost" id="btnAuth"><span class="dot" id="authDot"></span><span id="authLabel">Read-only</span></button>
+  </div>
+</header>
+
+<div id="banner" class="banner" hidden></div>
+
+<main class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="field">
+      <input type="search" id="search" placeholder="Search title, author, notes&hellip;" autocomplete="off" spellcheck="false">
+    </div>
+    <section class="facet">
+      <h2>Status</h2>
+      <div class="chips" id="facetStatus"></div>
+    </section>
+    <section class="facet">
+      <h2>Type</h2>
+      <div class="chips" id="facetType"></div>
+    </section>
+    <section class="facet">
+      <h2>Tags</h2>
+      <div class="chips" id="facetTags"></div>
+    </section>
+    <section class="facet">
+      <h2>Year</h2>
+      <div class="yearrow">
+        <input type="number" id="yearMin" placeholder="from" inputmode="numeric">
+        <span>&ndash;</span>
+        <input type="number" id="yearMax" placeholder="to" inputmode="numeric">
+      </div>
+    </section>
+    <button class="btn btn-ghost btn-block" id="btnClear">Clear filters</button>
+    <p class="sidenote" id="cacheNote"></p>
+  </aside>
+
+  <section class="content">
+    <div class="toolbar">
+      <label class="checkline"><input type="checkbox" id="selAll"><span id="countLabel">&nbsp;</span></label>
+      <div class="grow"></div>
+      <label class="sortline">Sort
+        <select id="sort">
+          <option value="year-desc">Year, newest</option>
+          <option value="year-asc">Year, oldest</option>
+          <option value="author-asc">First author A&ndash;Z</option>
+          <option value="title-asc">Title A&ndash;Z</option>
+          <option value="added-desc">Recently added</option>
+        </select>
+      </label>
+    </div>
+    <div id="list" class="list"></div>
+    <div id="empty" class="empty" hidden></div>
+  </section>
+</main>
+
+<div class="selbar" id="selbar" hidden>
+  <span id="selCount"></span>
+  <button class="btn btn-ghost btn-sm" id="selClear">Clear</button>
+  <button class="btn btn-primary btn-sm" id="selExport">Export selected</button>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true">
+    <button class="sheet-close" id="sheetClose" aria-label="Close">&times;</button>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
