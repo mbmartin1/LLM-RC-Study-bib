@@ -1,12 +1,9 @@
 # LLM-RC-Study bibliography
 
 Shared annotated bibliography for the LLM communicative-efficiency study
-("Do better models communicate less effectively?").
 
 **Site: <https://mbmartin1.github.io/LLM-RC-Study-bib/>**
 
-Anyone can read it. Collaborators on this repository can add and edit papers
-from the site itself — no cloning, no install, no build step.
 
 ## What is here
 
@@ -57,9 +54,6 @@ repository history.
 Without a token the site still works read-only, and Add/Edit hands you off to
 GitHub's own editor instead of saving directly.
 
-> **Keep this repository free of study material.** It is public. Participant
-> data, stimuli, unpublished results, and personal information do not belong in
-> it. Notes are for why a source matters to the project.
 
 ## The file format
 
