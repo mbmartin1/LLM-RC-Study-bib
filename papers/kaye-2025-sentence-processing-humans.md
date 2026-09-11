@@ -12,6 +12,9 @@ issue: 6
 pages: 2719–2733
 doi: 10.3758/s13423-025-02756-9
 url: "https://doi.org/10.3758/s13423-025-02756-9"
+tags:
+  - review
+  - sentence-processing
 status: background
 added: 2026-09-11
 added_by: mbmartin1
