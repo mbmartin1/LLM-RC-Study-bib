@@ -1,0 +1,212 @@
+---
+id: guo-2025-deepseek-incentivizes-reasoning
+type: article
+title: DeepSeek-R1 incentivizes reasoning in LLMs through reinforcement learning
+authors:
+  - Guo, Daya
+  - Yang, Dejian
+  - Zhang, Haowei
+  - Song, Junxiao
+  - Wang, Peiyi
+  - Zhu, Qihao
+  - Xu, Runxin
+  - Zhang, Ruoyu
+  - Ma, Shirong
+  - Bi, Xiao
+  - Zhang, Xiaokang
+  - Yu, Xingkai
+  - Wu, Yu
+  - Wu, Z. F.
+  - Gou, Zhibin
+  - Shao, Zhihong
+  - Li, Zhuoshu
+  - Gao, Ziyi
+  - Liu, Aixin
+  - Xue, Bing
+  - Wang, Bingxuan
+  - Wu, Bochao
+  - Feng, Bei
+  - Lu, Chengda
+  - Zhao, Chenggang
+  - Deng, Chengqi
+  - Ruan, Chong
+  - Dai, Damai
+  - Chen, Deli
+  - Ji, Dongjie
+  - Li, Erhang
+  - Lin, Fangyun
+  - Dai, Fucong
+  - Luo, Fuli
+  - Hao, Guangbo
+  - Chen, Guanting
+  - Li, Guowei
+  - Zhang, H.
+  - Xu, Hanwei
+  - Ding, Honghui
+  - Gao, Huazuo
+  - Qu, Hui
+  - Li, Hui
+  - Guo, Jianzhong
+  - Li, Jiashi
+  - Chen, Jingchang
+  - Yuan, Jingyang
+  - Tu, Jinhao
+  - Qiu, Junjie
+  - Li, Junlong
+  - Cai, J. L.
+  - Ni, Jiaqi
+  - Liang, Jian
+  - Chen, Jin
+  - Dong, Kai
+  - Hu, Kai
+  - You, Kaichao
+  - Gao, Kaige
+  - Guan, Kang
+  - Huang, Kexin
+  - Yu, Kuai
+  - Wang, Lean
+  - Zhang, Lecong
+  - Zhao, Liang
+  - Wang, Litong
+  - Zhang, Liyue
+  - Xu, Lei
+  - Xia, Leyi
+  - Zhang, Mingchuan
+  - Zhang, Minghua
+  - Tang, Minghui
+  - Zhou, Mingxu
+  - Li, Meng
+  - Wang, Miaojun
+  - Li, Mingming
+  - Tian, Ning
+  - Huang, Panpan
+  - Zhang, Peng
+  - Wang, Qiancheng
+  - Chen, Qinyu
+  - Du, Qiushi
+  - Ge, Ruiqi
+  - Zhang, Ruisong
+  - Pan, Ruizhe
+  - Wang, Runji
+  - Chen, R. J.
+  - Jin, R. L.
+  - Chen, Ruyi
+  - Lu, Shanghao
+  - Zhou, Shangyan
+  - Chen, Shanhuang
+  - Ye, Shengfeng
+  - Wang, Shiyu
+  - Yu, Shuiping
+  - Zhou, Shunfeng
+  - Pan, Shuting
+  - Li, S. S.
+  - Zhou, Shuang
+  - Wu, Shaoqing
+  - Yun, Tao
+  - Pei, Tian
+  - Sun, Tianyu
+  - Wang, T.
+  - Zeng, Wangding
+  - Liu, Wen
+  - Liang, Wenfeng
+  - Gao, Wenjun
+  - Yu, Wenqin
+  - Zhang, Wentao
+  - Xiao, W. L.
+  - An, Wei
+  - Liu, Xiaodong
+  - Wang, Xiaohan
+  - Chen, Xiaokang
+  - Nie, Xiaotao
+  - Cheng, Xin
+  - Liu, Xin
+  - Xie, Xin
+  - Liu, Xingchao
+  - Yang, Xinyu
+  - Li, Xinyuan
+  - Su, Xuecheng
+  - Lin, Xuheng
+  - Li, X. Q.
+  - Jin, Xiangyue
+  - Shen, Xiaojin
+  - Chen, Xiaosha
+  - Sun, Xiaowen
+  - Wang, Xiaoxiang
+  - Song, Xinnan
+  - Zhou, Xinyi
+  - Wang, Xianzu
+  - Shan, Xinxia
+  - Li, Y. K.
+  - Wang, Y. Q.
+  - Wei, Y. X.
+  - Zhang, Yang
+  - Xu, Yanhong
+  - Li, Yao
+  - Zhao, Yao
+  - Sun, Yaofeng
+  - Wang, Yaohui
+  - Yu, Yi
+  - Zhang, Yichao
+  - Shi, Yifan
+  - Xiong, Yiliang
+  - He, Ying
+  - Piao, Yishi
+  - Wang, Yisong
+  - Tan, Yixuan
+  - Ma, Yiyang
+  - Liu, Yiyuan
+  - Guo, Yongqiang
+  - Ou, Yuan
+  - Wang, Yuduan
+  - Gong, Yue
+  - Zou, Yuheng
+  - He, Yujia
+  - Xiong, Yunfan
+  - Luo, Yuxiang
+  - You, Yuxiang
+  - Liu, Yuxuan
+  - Zhou, Yuyang
+  - Zhu, Y. X.
+  - Huang, Yanping
+  - Li, Yaohui
+  - Zheng, Yi
+  - Zhu, Yuchen
+  - Ma, Yunxian
+  - Tang, Ying
+  - Zha, Yukun
+  - Yan, Yuting
+  - Ren, Z. Z.
+  - Ren, Zehui
+  - Sha, Zhangli
+  - Fu, Zhe
+  - Xu, Zhean
+  - Xie, Zhenda
+  - Zhang, Zhengyan
+  - Hao, Zhewen
+  - Ma, Zhicheng
+  - Yan, Zhigang
+  - Wu, Zhiyu
+  - Gu, Zihui
+  - Zhu, Zijia
+  - Liu, Zijun
+  - Li, Zilin
+  - Xie, Ziwei
+  - Song, Ziyang
+  - Pan, Zizheng
+  - Huang, Zhen
+  - Xu, Zhipeng
+  - Zhang, Zhongyu
+  - Zhang, Zhen
+year: 2025
+container: Nature
+volume: 645
+issue: 8081
+pages: 633–638
+doi: 10.1038/s41586-025-09422-z
+url: "https://doi.org/10.1038/s41586-025-09422-z"
+status: background
+added: 2026-09-29
+added_by: mbmartin1
+---
+
+General reasoning represents a long-standing and formidable challenge in artificial intelligence (AI). Recent breakthroughs, exemplified by large language models (LLMs)1,2 and chain-of-thought (CoT) prompting3, have achieved considerable success on foundational reasoning tasks. However, this success is heavily contingent on extensive human-annotated demonstrations and the capabilities of models are still insufficient for more complex problems. Here we show that the reasoning abilities of LLMs can be incentivized through pure reinforcement learning (RL), obviating the need for human-labelled reasoning trajectories. The proposed RL framework facilitates the emergent development of advanced reasoning patterns, such as self-reflection, verification and dynamic strategy adaptation. Consequently, the trained model achieves superior performance on verifiable tasks such as mathematics, coding competitions and STEM fields, surpassing its counterparts trained through conventional supervised learning on human demonstrations. Moreover, the emergent reasoning patterns exhibited by these large-scale models can be systematically used to guide and enhance the reasoning capabilities of smaller models.
